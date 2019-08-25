@@ -18,6 +18,7 @@ const HelloWorld = ({ name, updateName }) => (
         onChange={(e) => updateName(e.target.value)}
       />
     </form>
+    <a href="/users/sign_out">Sign Out</a>
   </div>
 );
 
