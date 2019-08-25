@@ -300,7 +300,5 @@ Devise.setup do |config|
   config.jwt do |jwt|
     jwt.secret = ENV['DEVISE_JWT_SECRET_KEY']
   end
-
-  # Skip session storage for /api calls
-  # TODO: Skip session storage for /api calls
+  
 end
