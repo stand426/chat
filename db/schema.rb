@@ -10,14 +10,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_25_182712) do
+ActiveRecord::Schema.define(version: 2019_08_25_234634) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "direct_messages", force: :cascade do |t|
+    t.bigint "sender_id"
+    t.bigint "recipient_id"
+    t.text "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["recipient_id"], name: "index_direct_messages_on_recipient_id"
+    t.index ["sender_id"], name: "index_direct_messages_on_sender_id"
+  end
+
+  create_table "group_messages", force: :cascade do |t|
+    t.bigint "message_group_id"
+    t.bigint "user_id"
+    t.text "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["message_group_id"], name: "index_group_messages_on_message_group_id"
+    t.index ["user_id"], name: "index_group_messages_on_user_id"
+  end
+
   create_table "jwt_blacklist", id: :serial, force: :cascade do |t|
     t.string "jti", null: false
     t.index ["jti"], name: "index_jwt_blacklist_on_jti"
+  end
+
+  create_table "message_groups", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_message_groups_on_name", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -32,4 +59,8 @@ ActiveRecord::Schema.define(version: 2019_08_25_182712) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "direct_messages", "users", column: "recipient_id"
+  add_foreign_key "direct_messages", "users", column: "sender_id"
+  add_foreign_key "group_messages", "message_groups"
+  add_foreign_key "group_messages", "users"
 end
